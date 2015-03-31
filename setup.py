@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-
 import re
 from os import path as op
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 def _read(fname):
@@ -28,7 +27,7 @@ setup(
     description=_read('DESCRIPTION'),
     long_description=_read('README.rst'),
     platforms=('Any'),
-    keywords = "django flask sqlalchemy testing mock stub mongoengine data".split(), # noqa
+    keywords = "asyncio aiohttp muffin jade".split(), # noqa
 
     author='Kirill Klenov',
     author_email='horneds@gmail.com',
@@ -36,19 +35,16 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Natural Language :: Russian',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Topic :: Software Development :: Testing',
         'Topic :: Utilities',
     ],
 
-    packages=find_packages(),
-    include_package_data=True,
+    py_modules=['muffin_jade'],
     install_requires=install_requires,
 )
