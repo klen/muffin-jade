@@ -52,8 +52,11 @@ Options
 -------
 
 **JADE_CACHE_SIZE** -- Cache size for compiled templates (100)
+
 **JADE_ENCODING** -- Templates' encoding (UTF-8)
+
 **JADE_PRETTY** -- Pretty output (True)
+
 **JADE_TEMPLATE_FOLDER** -- Path to base template folder (templates)
 
 Views
