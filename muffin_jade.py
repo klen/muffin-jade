@@ -34,6 +34,7 @@ class Plugin(BasePlugin):
 
         self.env = Environment()
         self.providers = []
+        self.functions = {}
 
     def setup(self, app):
         """ Setup the plugin from an application. """
@@ -54,10 +55,18 @@ class Plugin(BasePlugin):
         self.providers.append(func)
         return func
 
+    def register(self, func):
+        """ Register function to templates. """
+        if callable(func):
+            self.functions[func.__name__] = func
+        return func
+
     @asyncio.coroutine
     def render(self, path, **context):
         """ Render a template with context. """
-        ctx = dict()
+        funcs = self.functions
+        ctx = dict(self.functions, jdebug=lambda: dict(
+            (k, v) for k, v in ctx.items() if k not in funcs and k != 'jdebug'))
         for provider in self.providers:
             _ctx = yield from provider()
             ctx.update(_ctx)

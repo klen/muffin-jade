@@ -65,16 +65,21 @@ Views
 ::
 
     # Register custom context provider
-    # could be a coroutine
+    # could be a function/coroutine
     @app.ps.jade.ctx_provider
     def custom_context():
         return { 'VAR': 'VALUE' }
 
+    # Register a function into templates
+    @app.ps.jade.register
+    def sum(a, b):
+        return a + b
+
     @app.register('/')
     def index(request):
         """ Check for user is admin. """
-        context = {}
-        return app.ps.jade.render('index.jade', **context)
+        local_context = {'key': 'value'}
+        return app.ps.jade.render('index.jade', **local_context)
 
 
 .. _bugtracker:
