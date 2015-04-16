@@ -24,7 +24,7 @@ setup(
     name=_project,
     version=_version,
     license=_license,
-    description=_read('DESCRIPTION'),
+    description='Jade templates for Muffin Framework ',
     long_description=_read('README.rst'),
     platforms=('Any'),
     keywords = "asyncio aiohttp muffin jade".split(), # noqa
