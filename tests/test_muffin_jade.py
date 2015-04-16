@@ -7,12 +7,16 @@ def app(loop):
     app = muffin.Application(
         'jade', loop=loop,
 
-        JADE_TEMPLATE_FOLDER='tests',
+        JADE_TEMPLATE_FOLDERS='tests',
         PLUGINS=['muffin_jade'])
 
     @app.register('/')
     def index(request):
         return app.ps.jade.render('template.jade', **request.GET)
+
+    @app.register('/unknown')
+    def unknown(request):
+        return app.ps.jade.render('unknown.jade', **request.GET)
 
     @app.ps.jade.register
     def sum(a, b):
@@ -26,3 +30,6 @@ def test_muffin_jade(app, client):
     assert '<h1>Hello Jade!</h1>' in response.text
     assert '<p>8</p>' in response.text
     assert '<Application: jade>' in response.text
+
+    with pytest.raises(muffin.plugins.PluginException):
+        client.get('/unknown')

@@ -6,7 +6,7 @@ from os import path as op
 from pyjade.ext.html import pyjade, Compiler, local_context_manager
 from pyjade.nodes import Extends, CodeBlock
 
-from muffin.plugins import BasePlugin
+from muffin.plugins import BasePlugin, PluginException
 from muffin.utils import to_coroutine
 
 
@@ -14,6 +14,13 @@ __version__ = "0.0.4"
 __project__ = "muffin-jade"
 __author__ = "Kirill Klenov <horneds@gmail.com>"
 __license__ = "MIT"
+
+
+class JadeException(PluginException):
+
+    """ Implement Jade Exception. """
+
+    pass
 
 
 class Plugin(BasePlugin):
@@ -25,7 +32,7 @@ class Plugin(BasePlugin):
         cache_size=100,
         encoding='UTF-8',
         pretty=True,
-        template_folder='templates',
+        template_folders=('templates',),
     )
 
     def __init__(self, **options):
@@ -39,6 +46,9 @@ class Plugin(BasePlugin):
     def setup(self, app):
         """ Setup the plugin from an application. """
         super().setup(app)
+
+        if isinstance(self.options.template_folders, str):
+            self.options['template_folders'] = [self.options.template_folders]
 
         self.ctx_provider(lambda: {'app': self.app})
         self.env = Environment(debug=app.cfg.DEBUG, **self.options)
@@ -129,7 +139,13 @@ class Environment(object):
     def load_template(self, path):
         """ Load and compile a template. """
         if not path.startswith('/'):
-            path = op.join(self.options['template_folder'], path)
+            for folder in self.options['template_folders']:
+                fullpath = op.join(folder, path)
+                if op.exists(fullpath):
+                    path = fullpath
+                    break
+            else:
+                raise JadeException('Template doesnt exist: %s' % path)
 
         with open(path, 'rb') as f:
             source = f.read().decode(self.options['encoding'])

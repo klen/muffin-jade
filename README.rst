@@ -57,7 +57,7 @@ Options
 
 **JADE_PRETTY** -- Pretty output (True)
 
-**JADE_TEMPLATE_FOLDER** -- Path to base template folder (templates)
+**JADE_TEMPLATE_FOLDERS** -- List of pathes to templates folder ([templates])
 
 Views
 -----
