@@ -50,6 +50,8 @@ class Plugin(BasePlugin):
         if isinstance(self.options.template_folders, str):
             self.options['template_folders'] = [self.options.template_folders]
 
+        self.options['template_folders'] = list(self.options.template_folders)
+
         self.ctx_provider(lambda: {'app': self.app})
         self.env = Environment(debug=app.cfg.DEBUG, **self.options)
 
