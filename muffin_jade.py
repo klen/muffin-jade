@@ -47,13 +47,14 @@ class Plugin(BasePlugin):
         """ Setup the plugin from an application. """
         super().setup(app)
 
-        if isinstance(self.options.template_folders, str):
-            self.options['template_folders'] = [self.options.template_folders]
+        if isinstance(self.cfg.template_folders, str):
+            self.cfg.template_folders = [self.cfg.template_folders]
 
-        self.options['template_folders'] = list(self.options.template_folders)
+        else:
+            self.cfg.template_folders = list(self.cfg.template_folders)
 
         self.ctx_provider(lambda: {'app': self.app})
-        self.env = Environment(debug=app.cfg.DEBUG, **self.options)
+        self.env = Environment(debug=app.cfg.DEBUG, **self.cfg)
 
     def ctx_provider(self, func):
         """ Decorator for adding a context provider.
